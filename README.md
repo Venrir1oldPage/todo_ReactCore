@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Todo Application
 
 ### `npm start`
@@ -24,3 +25,6 @@ Your app is ready to be deployed!
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
 ### `npm run eject`
+=======
+
+>>>>>>> 4cbb6add69ebbd1fdb66f28eb9a3871becc5d478
