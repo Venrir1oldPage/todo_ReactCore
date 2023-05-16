@@ -1,53 +1,34 @@
 import "./Task.css";
-import { formatDistanceToNow } from "date-fns";
 import React, { Component } from "react";
 
 export default class Task extends Component {
   state = {
-    done: false,
-    edit: false,
+    label: this.props.label,
   };
-
-  onCheckboxClick = () => {
-    this.setState(({ done }) => {
-      return {
-        done: !done,
-      };
-    });
-  };
-
-  onEdit = () => {
-    if (!this.state.edit) {
-      this.setState({
-        edit: true,
-      });
-    }
-  };
-
-  finishEditing = () => {
-    if (this.state.edit) {
-      this.setState({
-        edit: false,
-      });
-    }
-  };
-  s;
 
   handleKeyDown = (event) => {
+    const { finishEditing } = this.props;
     if (event.key === "Enter") {
-      this.label = event.target.value;
-      this.finishEditing();
+      const newLabel = event.target.value;
+      this.setState(() => {
+        return {
+          label: newLabel,
+        };
+      });
+      finishEditing(event.target.value);
     }
   };
 
   handleChange = (event) => {
-    this.label = event.target.value;
+    const newLabel = event.target.value;
+    this.setState({
+      label: newLabel,
+    });
   };
 
   render() {
-    const { label, date, onDeleted } = this.props;
-    const { done, edit } = this.state;
-    const time = formatDistanceToNow(date, { addSuffix: true });
+    const { label, date, done, edit, onDeleted, onToggleDone, editing } =
+      this.props;
 
     let TaskClassName = "view";
     if (done) {
@@ -59,22 +40,18 @@ export default class Task extends Component {
     return (
       <li className={TaskClassName}>
         <div className="view">
-          <input
-            className="toggle"
-            type="checkbox"
-            onClick={this.onCheckboxClick}
-          />
+          <input className="toggle" type="checkbox" onClick={onToggleDone} />
           <label>
             <span className="description">{label}</span>
-            <span className="created">{time}</span>
+            <span className="created">{date}</span>
           </label>
-          <button className="icon icon-edit" onClick={this.onEdit}></button>
+          <button className="icon icon-edit" onClick={editing}></button>
           <button className="icon icon-destroy" onClick={onDeleted}></button>
         </div>
         <input
           type="text"
           className="edit"
-          value={label}
+          value={this.state.label}
           onChange={this.handleChange}
           onKeyDown={this.handleKeyDown}
         />

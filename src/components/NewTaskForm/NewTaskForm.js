@@ -3,13 +3,22 @@ import React, { Component } from "react";
 
 export default class NewTaskForm extends Component {
   state = {
-    value: "",
+    label: "",
   };
 
-  handleKeyDown = (event) => {
+  onInputChange = (e) => {
+    this.setState({
+      label: e.target.value,
+    });
+  };
+
+  onSending = (e) => {
     const { addTask } = this.props;
-    if (event.key === "Enter") {
-      addTask();
+    if (e.key === "Enter") {
+      addTask(this.state.label);
+      this.setState({
+        label: "",
+      });
     }
   };
 
@@ -18,9 +27,10 @@ export default class NewTaskForm extends Component {
       <input
         className="new-todo"
         placeholder="What needs to be done?"
-        onKeyDown={this.handleKeyDown}
-        onChange={(event) => this.setState({ value: event.target.value })}
-        value={this.state.value}
+        onChange={this.onInputChange}
+        autoFocus
+        onKeyDown={this.onSending}
+        value={this.state.label}
       />
     );
   }
