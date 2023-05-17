@@ -1,128 +1,128 @@
-import { Component } from "react";
-import Footer from "../Footer/Footer";
-import NewTaskForm from "../NewTaskForm/NewTaskForm";
-import TaskList from "../TaskList/TaskList";
-import "./App.css";
-import { formatDistanceToNow } from "date-fns";
+import { Component } from 'react'
+import { formatDistanceToNow } from 'date-fns'
+
+import Footer from '../Footer/Footer'
+import NewTaskForm from '../NewTaskForm/NewTaskForm'
+import TaskList from '../TaskList/TaskList'
+
+import './App.css'
+
+
+
 export default class App extends Component {
-  newId = 1;
+  newId = 1
 
   state = {
     todoData: [],
-    filter: "All",
+    filter: 'All',
     todoFiltered: [],
-  };
+  }
 
   createEl(label) {
-    let date = new Date();
-    const time = formatDistanceToNow(date, { addSuffix: true });
+    let date = new Date()
+    const time = formatDistanceToNow(date, {
+      includeSeconds: true,
+      addSuffix: true,
+    })
     return {
       label: label,
       id: this.newId++,
       date: time,
       done: false,
       edit: false,
-    };
+    }
   }
 
   addTask = (label) => {
     this.setState(({ todoData }) => {
-      const newTodoData = JSON.parse(JSON.stringify(todoData));
-      const newItem = this.createEl(label);
-      newTodoData.push(newItem);
+      const newTodoData = JSON.parse(JSON.stringify(todoData))
+      if (!label.trim().length > 0) return
+      const newItem = this.createEl(label)
+      newTodoData.push(newItem)
       return {
         todoData: newTodoData,
-      };
-    });
-  };
+      }
+    })
+  }
 
   deleteTask = (id) => {
     this.setState(({ todoData }) => {
-      const indx = todoData.findIndex((el) => el.id === id);
-      const newTodoData = JSON.parse(JSON.stringify(todoData));
-      newTodoData.splice(indx, 1);
+      const indx = todoData.findIndex((el) => el.id === id)
+      const newTodoData = JSON.parse(JSON.stringify(todoData))
+      newTodoData.splice(indx, 1)
       return {
         todoData: newTodoData,
-      };
-    });
-  };
+      }
+    })
+  }
 
   onToggleDone = (id) => {
     this.setState(({ todoData }) => {
-      const newTodoData = JSON.parse(JSON.stringify(todoData));
-      const indx = todoData.findIndex((el) => el.id === id);
-      const data = newTodoData[indx];
-      data.done = !data.done;
+      const newTodoData = JSON.parse(JSON.stringify(todoData))
+      const indx = todoData.findIndex((el) => el.id === id)
+      const data = newTodoData[indx]
+      data.done = !data.done
       return {
         todoData: newTodoData,
-      };
-    });
-  };
+      }
+    })
+  }
 
   editing = (id) => {
     this.setState(({ todoData }) => {
-      const newTodoData = JSON.parse(JSON.stringify(todoData));
-      const indx = todoData.findIndex((el) => el.id === id);
-      const oldData = newTodoData[indx];
-      oldData.edit = !oldData.edit;
+      const newTodoData = JSON.parse(JSON.stringify(todoData))
+      const indx = todoData.findIndex((el) => el.id === id)
+      const oldData = newTodoData[indx]
+      oldData.edit = !oldData.edit
       return {
         todoData: newTodoData,
-      };
-    });
-  };
+      }
+    })
+  }
 
   finishEditing = (id, value) => {
     this.setState(({ todoData }) => {
-      const newTodoData = JSON.parse(JSON.stringify(todoData));
-      const indx = todoData.findIndex((el) => el.id === id);
-      const data = newTodoData[indx];
-      data.label = value;
-      data.edit = false;
+      const newTodoData = JSON.parse(JSON.stringify(todoData))
+      const indx = todoData.findIndex((el) => el.id === id)
+      const data = newTodoData[indx]
+      data.label = value
+      data.edit = false
       return {
         todoData: newTodoData,
-      };
-    });
-  };
+      }
+    })
+  }
 
   changeFilter = (value) => {
-    this.setState({ filter: value });
-    // this.setState(({ todoData, filter, todoFiltered }) => {
-    //   const all = filter === "All";
-    //   const completed = filter === "Completed";
-    //   return {
-    //     todoFiltered: todoData.filter(({ done }) => {
-    //       return all ? true : completed ? done === true : done === false;
-    //     }),
-    //   };
-    // });
-  };
+    this.setState({ filter: value })
+  }
 
   deleteCompleted = () => {
     this.setState(({ todoData }) => {
       const newTodoData = JSON.parse(JSON.stringify(todoData)).filter(
         (el) => !el.done
-      );
+      )
       return {
         todoData: newTodoData,
-      };
-    });
-  };
+      }
+    })
+  }
 
   render() {
-    const { todoData, filter } = this.state;
+    const { todoData, filter } = this.state
     const counterLeft =
-      todoData.length - todoData.filter((el) => el.done).length;
-    let todoItemsShown;
+      todoData.length - todoData.filter((el) => el.done).length
+    let todoItemsShown
 
     switch (filter) {
-      case "Completed":
-        todoItemsShown = todoData.filter((elem) => elem.done);
-        break;
-      case "Active":
-        todoItemsShown = todoData.filter((elem) => !elem.done);
-        break;
-      default:
-        todoItemsShown = todoData;
+    case 'Completed':
+      todoItemsShown = todoData.filter((elem) => elem.done)
+      break
+    case 'Active':
+      todoItemsShown = todoData.filter((elem) => !elem.done)
+      break
+    default:
+      todoItemsShown = todoData
     }
 
     return (
@@ -147,6 +147,6 @@ export default class App extends Component {
           />
         </section>
       </section>
-    );
+    )
   }
 }

@@ -1,42 +1,41 @@
-import "./Task.css";
-import React, { Component } from "react";
+import './Task.css'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 export default class Task extends Component {
   state = {
     label: this.props.label,
-  };
+  }
 
   handleKeyDown = (event) => {
-    const { finishEditing } = this.props;
-    if (event.key === "Enter") {
-      const newLabel = event.target.value;
+    const { finishEditing } = this.props
+    if (event.key === 'Enter') {
+      const newLabel = event.target.value
       this.setState(() => {
         return {
           label: newLabel,
-        };
-      });
-      finishEditing(event.target.value);
+        }
+      })
+      finishEditing(event.target.value)
     }
-  };
+  }
 
   handleChange = (event) => {
-    const newLabel = event.target.value;
+    const newLabel = event.target.value
     this.setState({
       label: newLabel,
-    });
-  };
+    })
+  }
 
   render() {
-    const { label, date, done, edit, onDeleted, onToggleDone, editing } =
-      this.props;
+    const { label, date, done, edit, onDeleted, onToggleDone, editing } = this.props
 
-    let TaskClassName = "view";
+    let TaskClassName = 'view'
     if (done) {
-      TaskClassName = "completed";
+      TaskClassName = 'completed'
     } else if (edit) {
-      TaskClassName = "editing";
+      TaskClassName = 'editing'
     }
-
     return (
       <li className={TaskClassName}>
         <div className="view">
@@ -56,6 +55,23 @@ export default class Task extends Component {
           onKeyDown={this.handleKeyDown}
         />
       </li>
-    );
+    )
   }
+}
+
+Task.propTypes = {
+  todo: PropTypes.shape({
+    id: PropTypes.number,
+    label: PropTypes.string,
+    done: PropTypes.bool,
+    edit: PropTypes.bool,
+    date: PropTypes.instanceOf(Date),
+  }),
+  onDeleted: PropTypes.func.isRequired,
+  onToggleDone: PropTypes.func.isRequired,
+  editing: PropTypes.func.isRequired,
+}
+
+Task.defaultProps = {
+  todo: {},
 }
