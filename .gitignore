@@ -3,7 +3,6 @@
 # dependencies
 /node_modules
 /.pnp
-/.husky
 .pnp.js
 
 # testing
@@ -20,5 +19,3 @@
 .env.production.local
 
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*

@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 export default class Task extends Component {
   state = {
     label: this.props.label,
+    date: this.props.time,
   }
 
   handleKeyDown = (event) => {
@@ -13,7 +14,7 @@ export default class Task extends Component {
       const newLabel = event.target.value
       this.setState(() => {
         return {
-          label: newLabel,
+          label: newLabel
         }
       })
       finishEditing(event.target.value)
@@ -23,7 +24,7 @@ export default class Task extends Component {
   handleChange = (event) => {
     const newLabel = event.target.value
     this.setState({
-      label: newLabel,
+      label: newLabel
     })
   }
 
@@ -65,13 +66,13 @@ Task.propTypes = {
     label: PropTypes.string,
     done: PropTypes.bool,
     edit: PropTypes.bool,
-    date: PropTypes.instanceOf(Date),
+    date: PropTypes.instanceOf(Date)
   }),
   onDeleted: PropTypes.func.isRequired,
   onToggleDone: PropTypes.func.isRequired,
-  editing: PropTypes.func.isRequired,
+  editing: PropTypes.func.isRequired
 }
 
 Task.defaultProps = {
-  todo: {},
+  todo: {}
 }

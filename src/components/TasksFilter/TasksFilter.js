@@ -5,12 +5,18 @@ const TasksFilter = ({ onChangeFilter, filter }) => {
   return (
     <ul className="filters">
       <li>
-        <button onClick={() => onChangeFilter('All')} className={filter === 'All' ? 'selected' : null}>
+        <button
+          onClick={() => onChangeFilter('All')}
+          className={filter === 'All' ? 'selected' : null}
+        >
           All
         </button>
       </li>
       <li>
-        <button onClick={() => onChangeFilter('Active')} className={filter === 'Active' ? 'selected' : null}>
+        <button
+          onClick={() => onChangeFilter('Active')}
+          className={filter === 'Active' ? 'selected' : null}
+        >
           Active
         </button>
       </li>

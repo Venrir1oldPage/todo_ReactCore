@@ -4,12 +4,12 @@ import PropTypes from 'prop-types'
 
 export default class NewTaskForm extends Component {
   state = {
-    label: '',
+    label: ''
   }
 
   onInputChange = (e) => {
     this.setState({
-      label: e.target.value,
+      label: e.target.value
     })
   }
 
@@ -18,7 +18,7 @@ export default class NewTaskForm extends Component {
     if (e.key === 'Enter') {
       addTask(this.state.label)
       this.setState({
-        label: '',
+        label: ''
       })
     }
   }
@@ -38,11 +38,11 @@ export default class NewTaskForm extends Component {
 }
 
 NewTaskForm.defaultProps = {
-  placeholder: 'What needs to be done?',
+  placeholder: 'What needs to be done?'
 }
 
 NewTaskForm.propTypes = {
   placeholder: PropTypes.string,
   label: PropTypes.string,
-  addTask: PropTypes.func.isRequired,
+  addTask: PropTypes.func.isRequired
 }

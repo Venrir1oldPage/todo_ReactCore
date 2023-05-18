@@ -17,14 +17,14 @@ const Footer = ({ counterLeft, onClear, onChangeFilter, filter }) => {
 }
 Footer.defaultProps = {
   lcounterLeft: 0,
-  filter: 'All',
+  filter: 'All'
 }
 
 Footer.propTypes = {
   counterLeft: PropTypes.number,
   onClear: PropTypes.func.isRequired,
   onChangeFilter: PropTypes.func.isRequired,
-  filter: PropTypes.string,
+  filter: PropTypes.string
 }
 
 export default Footer

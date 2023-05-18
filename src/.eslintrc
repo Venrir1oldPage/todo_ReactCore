@@ -23,6 +23,7 @@
     "rules": {
       "indent": ["error", 2],
       "prettier/prettier": "off",
+      "no-console":"warn",
       "linebreak-style": [0, "unix"],
       "quotes": ["error", "single"],
       "semi": ["error", "never"],

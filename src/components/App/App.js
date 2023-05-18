@@ -7,29 +7,27 @@ import TaskList from '../TaskList/TaskList'
 
 import './App.css'
 
-
-
 export default class App extends Component {
   newId = 1
 
   state = {
     todoData: [],
     filter: 'All',
-    todoFiltered: [],
+    todoFiltered: []
   }
 
   createEl(label) {
-    let date = new Date()
-    const time = formatDistanceToNow(date, {
+    let time = formatDistanceToNow(new Date(), {
       includeSeconds: true,
-      addSuffix: true,
+      addSuffix: true
     })
     return {
+      startDate: new Date(),
       label: label,
       id: this.newId++,
       date: time,
       done: false,
-      edit: false,
+      edit: false
     }
   }
 
@@ -40,7 +38,7 @@ export default class App extends Component {
       const newItem = this.createEl(label)
       newTodoData.push(newItem)
       return {
-        todoData: newTodoData,
+        todoData: newTodoData
       }
     })
   }
@@ -51,7 +49,7 @@ export default class App extends Component {
       const newTodoData = JSON.parse(JSON.stringify(todoData))
       newTodoData.splice(indx, 1)
       return {
-        todoData: newTodoData,
+        todoData: newTodoData
       }
     })
   }
@@ -63,7 +61,7 @@ export default class App extends Component {
       const data = newTodoData[indx]
       data.done = !data.done
       return {
-        todoData: newTodoData,
+        todoData: newTodoData
       }
     })
   }
@@ -75,7 +73,7 @@ export default class App extends Component {
       const oldData = newTodoData[indx]
       oldData.edit = !oldData.edit
       return {
-        todoData: newTodoData,
+        todoData: newTodoData
       }
     })
   }
@@ -88,7 +86,7 @@ export default class App extends Component {
       data.label = value
       data.edit = false
       return {
-        todoData: newTodoData,
+        todoData: newTodoData
       }
     })
   }
@@ -99,19 +97,16 @@ export default class App extends Component {
 
   deleteCompleted = () => {
     this.setState(({ todoData }) => {
-      const newTodoData = JSON.parse(JSON.stringify(todoData)).filter(
-        (el) => !el.done
-      )
+      const newTodoData = JSON.parse(JSON.stringify(todoData)).filter((el) => !el.done)
       return {
-        todoData: newTodoData,
+        todoData: newTodoData
       }
     })
   }
 
   render() {
     const { todoData, filter } = this.state
-    const counterLeft =
-      todoData.length - todoData.filter((el) => el.done).length
+    const counterLeft = todoData.length - todoData.filter((el) => el.done).length
     let todoItemsShown
 
     switch (filter) {

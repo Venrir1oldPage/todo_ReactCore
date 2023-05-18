@@ -21,7 +21,7 @@ const TaskList = ({ todos, onDeleted, onToggleDone, editing, finishEditing }) =>
 }
 
 TaskList.defaultProps = {
-  todos: [],
+  todos: []
 }
 
 TaskList.propTypes = {
@@ -29,7 +29,7 @@ TaskList.propTypes = {
   onToggleDone: PropTypes.func.isRequired,
   editing: PropTypes.func.isRequired,
   onDeleted: PropTypes.func.isRequired,
-  finishEditing: PropTypes.func.isRequired,
+  finishEditing: PropTypes.func.isRequired
 }
 
 export default TaskList
