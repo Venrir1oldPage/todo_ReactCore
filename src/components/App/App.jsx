@@ -1,5 +1,4 @@
 import { Component } from 'react'
-import { formatDistanceToNow } from 'date-fns'
 
 import Footer from '../Footer/Footer'
 import NewTaskForm from '../NewTaskForm/NewTaskForm'
@@ -8,35 +7,15 @@ import TaskList from '../TaskList/TaskList'
 import './App.css'
 
 export default class App extends Component {
-  newId = 1
-
   state = {
     todoData: [],
     filter: 'All',
     todoFiltered: []
   }
 
-  createEl(label) {
-    let time = formatDistanceToNow(new Date(), {
-      includeSeconds: true,
-      addSuffix: true
-    })
-    return {
-      startDate: new Date(),
-      label: label,
-      id: this.newId++,
-      date: time,
-      done: false,
-      edit: false
-    }
-  }
-
-  addTask = (label) => {
+  addTask = (el) => {
     this.setState(({ todoData }) => {
-      const newTodoData = JSON.parse(JSON.stringify(todoData))
-      if (!label.trim().length > 0) return
-      const newItem = this.createEl(label)
-      newTodoData.push(newItem)
+      const newTodoData =[...todoData, el]
       return {
         todoData: newTodoData
       }
@@ -45,9 +24,22 @@ export default class App extends Component {
 
   deleteTask = (id) => {
     this.setState(({ todoData }) => {
-      const indx = todoData.findIndex((el) => el.id === id)
-      const newTodoData = JSON.parse(JSON.stringify(todoData))
-      newTodoData.splice(indx, 1)
+      const newTodoData = todoData.filter((el) => el.id !== id)
+      return {
+        todoData: newTodoData
+      }
+    })
+  }
+
+  changeSetting = (id, setting, value = false) => {
+    this.setState(({ todoData }) => {
+      const newTodoData = todoData.map((el) => {
+        if (el.id === id) {
+          el[setting] = !el[setting]
+          if(value)  el.label = value
+        }
+        return el
+      })
       return {
         todoData: newTodoData
       }
@@ -55,40 +47,15 @@ export default class App extends Component {
   }
 
   onToggleDone = (id) => {
-    this.setState(({ todoData }) => {
-      const newTodoData = JSON.parse(JSON.stringify(todoData))
-      const indx = todoData.findIndex((el) => el.id === id)
-      const data = newTodoData[indx]
-      data.done = !data.done
-      return {
-        todoData: newTodoData
-      }
-    })
+    this.changeSetting(id, 'done')
   }
 
   editing = (id) => {
-    this.setState(({ todoData }) => {
-      const newTodoData = JSON.parse(JSON.stringify(todoData))
-      const indx = todoData.findIndex((el) => el.id === id)
-      const oldData = newTodoData[indx]
-      oldData.edit = !oldData.edit
-      return {
-        todoData: newTodoData
-      }
-    })
+    this.changeSetting(id, 'edit')
   }
 
   finishEditing = (id, value) => {
-    this.setState(({ todoData }) => {
-      const newTodoData = JSON.parse(JSON.stringify(todoData))
-      const indx = todoData.findIndex((el) => el.id === id)
-      const data = newTodoData[indx]
-      data.label = value
-      data.edit = false
-      return {
-        todoData: newTodoData
-      }
-    })
+    this.changeSetting(id, 'edit', value)
   }
 
   changeFilter = (value) => {
@@ -97,7 +64,7 @@ export default class App extends Component {
 
   deleteCompleted = () => {
     this.setState(({ todoData }) => {
-      const newTodoData = JSON.parse(JSON.stringify(todoData)).filter((el) => !el.done)
+      const newTodoData = todoData.filter((el) => !el.done)
       return {
         todoData: newTodoData
       }
@@ -138,7 +105,7 @@ export default class App extends Component {
             counterLeft={counterLeft}
             onClear={this.deleteCompleted}
             onChangeFilter={this.changeFilter}
-            filter={this.state.filter}
+            filterSelected={this.state.filter}
           />
         </section>
       </section>

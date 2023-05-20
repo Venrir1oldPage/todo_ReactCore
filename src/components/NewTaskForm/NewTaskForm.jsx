@@ -1,6 +1,8 @@
 import './NewTaskForm.css'
-import React, { Component } from 'react'
+import { Component } from 'react'
 import PropTypes from 'prop-types'
+import { formatDistanceToNow } from 'date-fns'
+import { v4 as uuidv4 } from 'uuid'
 
 export default class NewTaskForm extends Component {
   state = {
@@ -13,13 +15,30 @@ export default class NewTaskForm extends Component {
     })
   }
 
-  onSending = (e) => {
+  onSending = ({key}) => {
     const { addTask } = this.props
-    if (e.key === 'Enter') {
-      addTask(this.state.label)
+    if (key === 'Enter') {
+      if (!/[^\s]/.test(this.state.label)) return
+      let el = this.createEl(this.state.label)
+      addTask(el)
       this.setState({
         label: ''
       })
+    }
+  }
+
+  createEl(label) {
+    let time = formatDistanceToNow(new Date(), {
+      includeSeconds: true,
+      addSuffix: true
+    })
+    return {
+      startDate: new Date(),
+      label: label,
+      id: uuidv4(),
+      date: time,
+      done: false,
+      edit: false
     }
   }
 

@@ -10,13 +10,14 @@
       "plugin:react/recommended",
       "plugin:prettier/recommended",
       "plugin:import/errors",
-      "plugin:import/warnings"
+      "plugin:import/warnings",
+      "plugin:react/jsx-runtime"
     ],
     "parserOptions": {
       "ecmaFeatures": {
         "jsx": true
       },
-      "ecmaVersion": 12,
+      "ecmaVersion": "latest",
       "sourceType": "module"
     },
     "plugins": ["react", "prettier", "import"],
@@ -29,6 +30,8 @@
       "semi": ["error", "never"],
       "react/react-in-jsx-scope": "off",
       "react/prop-types": 0,
+      "react/jsx-uses-react": "error",
+      "react/jsx-uses-vars": "error",
       "import/no-unresolved": [2, { "caseSensitive": false }],
       "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
       "import/order": [
@@ -47,6 +50,9 @@
       ]
     },
     "settings": {
+      "react": {
+        "version": "detect"
+      },
       "import/resolver": {
         "node": {
           "extensions": [".js", ".jsx", ".ts", ".tsx"],
