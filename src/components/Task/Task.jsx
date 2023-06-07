@@ -1,46 +1,67 @@
 import './Task.css'
 import PropTypes from 'prop-types'
+import { Component } from 'react'
 
-const Task = ({ label, date, done, edit, onDeleted, finishEditing, onToggleDone, editing }) => {
+import Timer from '../Timer/Timer'
 
-  const handleKeyDown = ({key, target}) => {
-    if (key === 'Enter') {
-      finishEditing(target.value)
-    }
+export default class Task extends Component { 
+
+  state={
+    play:false,
+    min:this.props.min,
+    sec:this.props.sec
   }
 
-  const toggleDone = ({target}) => {
+  holdTimer = (min,sec,play) => {
+    this.setState({
+      play:play,
+      min:min,
+      sec:sec
+    })
+  }
+
+  handleKeyDown = ({key, target}) => {
+    if (key === 'Enter') {this.props.finishEditing(target.value)}}
+
+  toggleDone = ({target}) => { 
     target.checked =  !target.checked
-    onToggleDone()
+    this.props.onToggleDone()
   }
 
-  let TaskClassName = 'view'
-  if (done) {
-    TaskClassName = 'completed'
-  } else if (edit) {
-    TaskClassName = 'editing' }
-  
-  return (
-    <li className={TaskClassName}>
-      <div className="view">
-        <input className="toggle" type="checkbox" checked={done} onChange={toggleDone}/>
-        <label>
-          <span className="description">{label}</span>
-          <span className="created">{date}</span>
-        </label>
-        <button className="icon icon-edit" onClick={editing}></button>
-        <button className="icon icon-destroy" onClick={onDeleted}></button>
-      </div>
-      <input
-        type="text"
-        id = "inputEdit"
-        className="edit"
-        onKeyDown={handleKeyDown}
-        defaultValue={label}
-      />
-    </li>
-  )
+  render () {
+    const { label, date, done, edit, onDeleted, editing } = this.props
+    
+    let TaskClassName = 'view'
+    if (done) {
+      TaskClassName = 'completed'
+    } else if (edit) {
+      TaskClassName = 'editing' }
+
+    const {play,sec,min} = this.state
+    return (
+      <li className={TaskClassName}>
+        <div className="view">
+          <input className="toggle" type="checkbox" checked={done} onChange={this.toggleDone}/>
+          <label>
+            <span className="title">{label}</span>
+            <Timer min={min} sec={sec} play={play} holdTimer={this.holdTimer}/>
+            <span className="description">{date}</span>
+          </label>
+          <button className="icon icon-edit" onClick={editing}></button>
+          <button className="icon icon-destroy" onClick={onDeleted}></button>
+        </div>
+        <input
+          type="text"
+          id = "inputEdit"
+          className="edit"
+          onKeyDown={this.handleKeyDown}
+          defaultValue={label}
+        />
+      </li>
+    )
+  }
 }
+
 
 Task.propTypes = {
   todo: PropTypes.shape({
@@ -58,6 +79,3 @@ Task.propTypes = {
 Task.defaultProps = {
   todo: {}
 }
-
-
-export default Task 
