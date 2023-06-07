@@ -2,10 +2,7 @@ import { Component } from 'react'
 import PropTypes from 'prop-types'
 
 export default class Timer extends Component {
-  constructor(props){
-    super(props),
-    console.log(props)
-  }
+  
   state={ 
     play:this.props.play,
     sec:this.props.sec,
@@ -53,7 +50,6 @@ export default class Timer extends Component {
   }
 
   render() {
-    console.log( this.state.play)
     const iconPlayPause = this.state.play?
       <button className="icon icon-pause" onClick={this.togglePlay} />:
       <button className="icon icon-play" onClick={this.togglePlay}/>

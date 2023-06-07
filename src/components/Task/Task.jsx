@@ -25,7 +25,6 @@ export default class Task extends Component {
   }
 
   render () {
-    console.log(this.props)
     const { label, date, done, edit, onDeleted, editing } = this.props
     
     let TaskClassName = 'view'
