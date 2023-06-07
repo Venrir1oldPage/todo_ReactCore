@@ -46,6 +46,23 @@ export default class App extends Component {
     })
   }
 
+  holdTimer = (id, min,sec,play) => {
+    console.log('App',id, min,sec,play)
+    this.setState(({ todoData }) => {
+      const newTodoData = todoData.map((el) => {
+        if (el.id === id) {
+          el.play=play,
+          el.min=min,
+          el.sec=sec
+        }
+        return el
+      })
+      return {
+        todoData: newTodoData
+      }
+    })
+  }
+
   onToggleDone = (id) => {
     this.changeSetting(id, 'done')
   }
@@ -100,6 +117,7 @@ export default class App extends Component {
             onToggleDone={this.onToggleDone}
             editing={this.editing}
             finishEditing={this.finishEditing}
+            holdTimer={this.holdTimer}
           />
           <Footer
             counterLeft={counterLeft}

@@ -7,17 +7,13 @@ import Timer from '../Timer/Timer'
 export default class Task extends Component { 
 
   state={
-    play:false,
+    play:this.props.play||false,
     min:this.props.min,
     sec:this.props.sec
   }
 
-  holdTimer = (min,sec,play) => {
-    this.setState({
-      play:play,
-      min:min,
-      sec:sec
-    })
+  holdTimer = (state) => {
+    this.props.holdTimer(state)
   }
 
   handleKeyDown = ({key, target}) => {
@@ -29,6 +25,7 @@ export default class Task extends Component {
   }
 
   render () {
+    console.log(this.props)
     const { label, date, done, edit, onDeleted, editing } = this.props
     
     let TaskClassName = 'view'
