@@ -1,3 +1,3 @@
 Todo app
 
-Vercel: https://todo-react-core-op31afeu4-bessarab97-gmailcom.vercel.app/
+Vercel: https://todo-react-core-git-timer-bessarab97-gmailcom.vercel.app/
