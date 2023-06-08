@@ -69,7 +69,9 @@ Task.propTypes = {
   }),
   onDeleted: PropTypes.func.isRequired,
   onToggleDone: PropTypes.func.isRequired,
-  editing: PropTypes.func.isRequired
+  editing: PropTypes.func.isRequired,
+  finishEditing: PropTypes.func.isRequired,
+  holdTimer: PropTypes.func.isRequired,
 }
 
 Task.defaultProps = {

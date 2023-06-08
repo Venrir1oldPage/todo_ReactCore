@@ -1,4 +1,5 @@
 import './TaskFilter.css'
+import PropTypes from 'prop-types'
 
 const TasksFilter = ({ onChangeFilter, filterSelected,  filterName }) => {
   return (
@@ -12,4 +13,11 @@ const TasksFilter = ({ onChangeFilter, filterSelected,  filterName }) => {
   )
 }
 
+TasksFilter.propTypes = {
+  filterSelected: PropTypes.string,
+  onChangeFilter: PropTypes.func.isRequired,
+  filterName: PropTypes.string
+}
+
 export default TasksFilter
+

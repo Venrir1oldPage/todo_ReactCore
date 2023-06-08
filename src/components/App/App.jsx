@@ -47,7 +47,6 @@ export default class App extends Component {
   }
 
   holdTimer = (id, min,sec,play) => {
-    console.log('App',id, min,sec,play)
     this.setState(({ todoData }) => {
       const newTodoData = todoData.map((el) => {
         if (el.id === id) {

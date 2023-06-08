@@ -28,6 +28,12 @@ export default class NewTaskForm extends Component {
 
   onInputChange = (e) => {
     let key= e.target.id
+    if(key==='sec' && e.target.value>59){ 
+      e.target.style.color='#FF0000'
+      return
+    } else {
+      e.target.style.color='#010000'
+    }
     this.setState({
       [key]: e.target.value
     })
@@ -73,7 +79,7 @@ export default class NewTaskForm extends Component {
         <input  id='min' className="new-todo-form__timer"  onChange={this.onInputChange} type='number'
           value={this.state.min} placeholder="Min" onKeyDown={this.runNext}/>
         <input  id='sec' className="new-todo-form__timer"  onChange={this.onInputChange} type='number'
-          value={this.state.sec} placeholder="Sec" onKeyDown= {this.onSending}/>
+          value={this.state.sec} placeholder="Sec" max={59} onKeyDown= {this.onSending}/>
       </form>
     )
   }
@@ -85,6 +91,5 @@ NewTaskForm.defaultProps = {
 
 NewTaskForm.propTypes = {
   placeholder: PropTypes.string,
-  label: PropTypes.string,
   addTask: PropTypes.func.isRequired
 }

@@ -68,6 +68,7 @@ Timer.propTypes = {
   min: PropTypes.number,
   sec: PropTypes.number,
   play:PropTypes.bool,
+  holdTimer: PropTypes.func.isRequired,
 }
 
 Timer.defaultProps = {
