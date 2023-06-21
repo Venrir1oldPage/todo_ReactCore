@@ -1,79 +1,69 @@
 import './Task.css'
 import PropTypes from 'prop-types'
-import { Component } from 'react'
 
 import Timer from '../Timer/Timer'
+import CreatingTime from '../CreatingTime/CreatingTime'
 
-export default class Task extends Component { 
+const Task = (props) => {
+  const {play, min, sec, timerId,  label, done, edit, date, onDeleted, onToggleDone, id, 
+    editing, finishEditing} = props
 
-  state={
-    play:this.props.play||false,
-    min:this.props.min,
-    sec:this.props.sec
-  }
+  const handleKeyDown = ({key, target}) => {
+    if (key === 'Enter') {
+      if (!/[^\s]/.test(target.value)) return
+      finishEditing(target.value)
+    }}
 
-  holdTimer = (state) => {
-    this.props.holdTimer(state)
-  }
-
-  handleKeyDown = ({key, target}) => {
-    if (key === 'Enter') {this.props.finishEditing(target.value)}}
-
-  toggleDone = ({target}) => { 
+  const toggleDone = ({target}) => { 
     target.checked =  !target.checked
-    this.props.onToggleDone()
+    onToggleDone()
   }
 
-  render () {
-    const { label, date, done, edit, onDeleted, editing } = this.props
-    
-    let TaskClassName = 'view'
-    if (done) {
-      TaskClassName = 'completed'
-    } else if (edit) {
-      TaskClassName = 'editing' }
+  let TaskClassName = 'view'
+  if (done) {
+    TaskClassName = 'completed'
+  } else if (edit) {
+    TaskClassName = 'editing' }
 
-    const {play,sec,min} = this.state
-    return (
-      <li className={TaskClassName}>
-        <div className="view">
-          <input className="toggle" type="checkbox" checked={done} onChange={this.toggleDone}/>
-          <label>
-            <span className="title">{label}</span>
-            <Timer min={min} sec={sec} play={play} holdTimer={this.holdTimer}/>
-            <span className="description">{date}</span>
-          </label>
-          <button className="icon icon-edit" onClick={editing}></button>
-          <button className="icon icon-destroy" onClick={onDeleted}></button>
-        </div>
-        <input
-          type="text"
-          id = "inputEdit"
-          className="edit"
-          onKeyDown={this.handleKeyDown}
-          defaultValue={label}
-        />
-      </li>
-    )
-  }
+  return (
+    <li className={TaskClassName}>
+      <div className="view">
+        <input className="toggle" type="checkbox" checked={done} onChange={toggleDone}/>
+        <label>
+          <span className="title">{label}</span>
+          <Timer min={min} sec={sec} play={play} id={id} timerId={timerId}/>
+          <CreatingTime date={date}/>
+        </label>
+        <button className="icon icon-edit" onClick={editing}></button>
+        <button className="icon icon-destroy" onClick={onDeleted}></button>
+      </div>
+      <input
+        type="text"
+        className="edit"
+        onKeyDown={handleKeyDown}
+        defaultValue={label}
+      />
+    </li>
+  )  
 }
 
 
 Task.propTypes = {
-  todo: PropTypes.shape({
-    id: PropTypes.number,
-    label: PropTypes.string,
-    done: PropTypes.bool,
-    edit: PropTypes.bool,
-    date: PropTypes.instanceOf(Date)
-  }),
+  play: PropTypes.bool,
+  min:PropTypes.number,
+  sec:PropTypes.number,
+  label: PropTypes.string,
+  done: PropTypes.bool,
+  edit: PropTypes.bool,
+  date: PropTypes.instanceOf(Date),
   onDeleted: PropTypes.func.isRequired,
   onToggleDone: PropTypes.func.isRequired,
   editing: PropTypes.func.isRequired,
   finishEditing: PropTypes.func.isRequired,
-  holdTimer: PropTypes.func.isRequired,
 }
 
 Task.defaultProps = {
   todo: {}
 }
+
+export default Task

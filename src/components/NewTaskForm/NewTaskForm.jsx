@@ -1,95 +1,80 @@
 import './NewTaskForm.css'
-import { Component } from 'react'
 import PropTypes from 'prop-types'
-import { formatDistanceToNow } from 'date-fns'
 import { v4 as uuidv4 } from 'uuid'
+import { useState } from 'react'
 
-export default class NewTaskForm extends Component {
-  state = {
-    label: '',
-    min:'',
-    sec:'',
-  }
 
-  onSending = ({key}) => {
-    const { addTask } = this.props
+const NewTaskForm = ({addTask}) => {
+
+  const [label, setLabel] = useState('')
+  const [min, setMin] = useState('')
+  const [sec, setSec] = useState('')
+
+  const onSending = ({key}) => {
     if (key === 'Enter') {
-      if (!/[^\s]/.test(this.state.label)) return
-      let el = this.createEl(this.state.label, this.state.min, this.state.sec)
+      if (!/[^\s]/.test(label)) return
+      let el = createEl(label, min, sec)
       addTask(el)
-      this.setState({
-        label: '',
-        min:'',
-        sec:'',
-      })
+
+      setLabel('')
+      setMin('')
+      setSec('')
+
       document.getElementById('label').focus()
     }
   }
 
-  onInputChange = (e) => {
+  const onInputChange = (e) => {
     let key= e.target.id
+    let value = e.target.value
     if(key==='sec' && e.target.value>59){ 
       e.target.style.color='#FF0000'
       return
     } else {
       e.target.style.color='#010000'
     }
-    this.setState({
-      [key]: e.target.value
-    })
+    key==='label'?setLabel(value):key==='min'?setMin(value):setSec(value)
   }
 
-  runNext = ({key, target}) => {
+  const runNext = ({key, target}) => {
     if (key === 'Enter') {
       target.nextSibling.focus()
     }
   }
 
-  createEl(label, min, sec) {
+  const createEl = (label, min, sec) =>{
     min=min?+min:0
     sec=sec?+sec:0
-    let time = formatDistanceToNow(new Date(), {
-      includeSeconds: true,
-      addSuffix: true
-    })
+    let date = new Date()
     return {
-      startDate: new Date(),
       label: label,
       id: uuidv4(),
-      date: time,
+      date: date,
       done: false,
       edit: false,
+      play:false,
       min:min,
-      sec:sec
+      sec:sec,
+      timerId:null
     }
   }
 
-  render() {
-    return (
-      <form className="new-todo-form">
-        <input
-          id='label'
-          className="new-todo"
-          placeholder="What needs to be done?"
-          onChange={this.onInputChange}
-          autoFocus
-          onKeyDown={this.runNext}
-          value={this.state.label}
-        />
-        <input  id='min' className="new-todo-form__timer"  onChange={this.onInputChange} type='number'
-          value={this.state.min} placeholder="Min" onKeyDown={this.runNext}/>
-        <input  id='sec' className="new-todo-form__timer"  onChange={this.onInputChange} type='number'
-          value={this.state.sec} placeholder="Sec" max={59} onKeyDown= {this.onSending}/>
-      </form>
-    )
-  }
+  return (
+    <form className="new-todo-form">
+      <input  id='label' className="new-todo" placeholder="What needs to be done?"
+        onChange={onInputChange} autoFocus onKeyDown={runNext} value={label}
+      />
+      <input  id='min' className="new-todo-form__timer"  onChange={onInputChange} type='number'
+        value={min} placeholder="Min" onKeyDown={runNext}/>
+      <input  id='sec' className="new-todo-form__timer"  onChange={onInputChange} type='number'
+        value={sec} placeholder="Sec" max={59} onKeyDown= {onSending}/>
+    </form>
+  )
 }
 
-NewTaskForm.defaultProps = {
-  placeholder: 'What needs to be done?'
-}
 
 NewTaskForm.propTypes = {
-  placeholder: PropTypes.string,
   addTask: PropTypes.func.isRequired
 }
+
+export default NewTaskForm

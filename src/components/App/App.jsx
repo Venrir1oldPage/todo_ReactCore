@@ -1,38 +1,35 @@
-import { Component } from 'react'
+import {  useState } from 'react'
 
+import MyContext from '../MyContext/MyContext'
 import Footer from '../Footer/Footer'
 import NewTaskForm from '../NewTaskForm/NewTaskForm'
 import TaskList from '../TaskList/TaskList'
 
 import './App.css'
 
-export default class App extends Component {
-  state = {
-    todoData: [],
-    filter: 'All',
-    todoFiltered: []
-  }
+const App = () => {
 
-  addTask = (el) => {
-    this.setState(({ todoData }) => {
+  const [todoData, setTodoData] = useState([])
+  const [filter, setFilter] = useState('All')
+
+  const addTask = (el) => {
+    setTodoData((todoData ) => {
       const newTodoData =[...todoData, el]
-      return {
-        todoData: newTodoData
-      }
+      return newTodoData
     })
   }
 
-  deleteTask = (id) => {
-    this.setState(({ todoData }) => {
+  const deleteTask = (id) => {
+    let el = todoData.find((el)=>el.id=id)
+    clearInterval(el.timerId)
+    setTodoData(( todoData ) => {
       const newTodoData = todoData.filter((el) => el.id !== id)
-      return {
-        todoData: newTodoData
-      }
+      return  newTodoData
     })
   }
 
-  changeSetting = (id, setting, value = false) => {
-    this.setState(({ todoData }) => {
+  const changeSetting = (id, setting, value = false) => {
+    setTodoData(( todoData ) => {
       const newTodoData = todoData.map((el) => {
         if (el.id === id) {
           el[setting] = !el[setting]
@@ -40,92 +37,88 @@ export default class App extends Component {
         }
         return el
       })
-      return {
-        todoData: newTodoData
-      }
+      return newTodoData
     })
   }
 
-  holdTimer = (id, min,sec,play) => {
-    this.setState(({ todoData }) => {
+  const  holdTimer = (id,min,sec,play, timerId=false) => {
+    setTodoData(( todoData ) => {
       const newTodoData = todoData.map((el) => {
         if (el.id === id) {
           el.play=play,
           el.min=min,
-          el.sec=sec
+          el.sec=sec,
+          el.timerId=timerId
         }
         return el
       })
-      return {
-        todoData: newTodoData
-      }
+      return newTodoData   
     })
   }
 
-  onToggleDone = (id) => {
-    this.changeSetting(id, 'done')
+  const onToggleDone = (id) => {
+    changeSetting(id, 'done')
   }
 
-  editing = (id) => {
-    this.changeSetting(id, 'edit')
+  const editing = (id) => {
+    changeSetting(id, 'edit')
   }
 
-  finishEditing = (id, value) => {
-    this.changeSetting(id, 'edit', value)
+  const finishEditing = (id, value) => {
+    changeSetting(id, 'edit', value)
   }
 
-  changeFilter = (value) => {
-    this.setState({ filter: value })
+  const changeFilter = (value) => {
+    setFilter(value)
   }
 
-  deleteCompleted = () => {
-    this.setState(({ todoData }) => {
+  const deleteCompleted = () => {
+    setTodoData(( todoData ) => {
       const newTodoData = todoData.filter((el) => !el.done)
-      return {
-        todoData: newTodoData
-      }
+      return newTodoData
     })
   }
 
-  render() {
-    const { todoData, filter } = this.state
-    const counterLeft = todoData.length - todoData.filter((el) => el.done).length
-    let todoItemsShown
+  const counterLeft = todoData.length - todoData.filter((el) => el.done).length
+  let todoItemsShown
 
-    switch (filter) {
-    case 'Completed':
-      todoItemsShown = todoData.filter((elem) => elem.done)
-      break
-    case 'Active':
-      todoItemsShown = todoData.filter((elem) => !elem.done)
-      break
-    default:
-      todoItemsShown = todoData
-    }
+  switch (filter) {
+  case 'Completed':
+    todoItemsShown = todoData.filter((elem) => elem.done)
+    break
+  case 'Active':
+    todoItemsShown = todoData.filter((elem) => !elem.done)
+    break
+  default:
+    todoItemsShown = todoData
+  }
 
-    return (
-      <section className="todoapp">
-        <header className="header">
-          <h1>todos</h1>
-          <NewTaskForm addTask={this.addTask} />
-        </header>
-        <section className="main">
+  return (
+    <section className="todoapp">
+      <header className="header">
+        <h1>todos</h1>
+        <NewTaskForm addTask={addTask} />
+      </header>
+      <section className="main">
+        <MyContext.Provider value = {holdTimer}>
           <TaskList
             todos={todoItemsShown}
-            onDeleted={(id) => this.deleteTask(id)}
-            onToggleDone={this.onToggleDone}
-            editing={this.editing}
-            finishEditing={this.finishEditing}
-            holdTimer={this.holdTimer}
+            onDeleted={(id) => deleteTask(id)}
+            onToggleDone={onToggleDone}
+            editing={editing}
+            finishEditing={finishEditing}
+            holdTimer={holdTimer}
           />
-          <Footer
-            counterLeft={counterLeft}
-            onClear={this.deleteCompleted}
-            onChangeFilter={this.changeFilter}
-            filterSelected={this.state.filter}
-          />
-        </section>
+        </MyContext.Provider>
+        <Footer
+          counterLeft={counterLeft}
+          onClear={deleteCompleted}
+          onChangeFilter={changeFilter}
+          filterSelected={filter}
+        />
       </section>
-    )
-  }
+    </section>
+  )
 }
+
+export default App
